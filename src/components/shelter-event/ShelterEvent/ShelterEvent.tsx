@@ -1,4 +1,3 @@
-import useVolunteerEvent from '@/api/shelter/event/useVolunteerEvent';
 import { Calendar, Clockmd } from '@/asset/icons';
 import Badge from '@/components/common/Badge/Badge';
 import Button from '@/components/common/Button/Button';
@@ -30,8 +29,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
-import * as styles from './ShelterEvent.css';
+import { VolunteerEvent } from '@/api/shelter/event/volunteer-event';
 import ConfirmContent from '../ConfirmContent/ConfirmContent';
+import * as styles from './ShelterEvent.css';
 
 const QNA =
   'https://www.notion.so/yapp-workspace/FAQ-f492ba54a5d647129ca9697fbd307b20?pvs=4';
@@ -43,11 +43,13 @@ const DangleMap = dynamic(() => import('@/components/common/Map/DangleMap'), {
 interface ShelterEventProps {
   shelterId: number;
   volunteerEventId: number;
+  data: VolunteerEvent;
 }
 
 export default function ShelterEvent({
   shelterId,
-  volunteerEventId
+  volunteerEventId,
+  data: eventDetail
 }: ShelterEventProps) {
   const route = useRouter();
 
@@ -55,8 +57,6 @@ export default function ShelterEvent({
   const [isModal, setModalOpen, setModalClose] = useBooleanState();
   const [showVol, , , setToggleShowVol] = useBooleanState();
   const toastOn = useToast();
-
-  const { data: eventDetail } = useVolunteerEvent(shelterId, volunteerEventId);
 
   if (!eventDetail) return null;
 

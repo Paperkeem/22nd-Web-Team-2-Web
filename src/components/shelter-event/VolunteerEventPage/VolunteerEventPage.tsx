@@ -10,6 +10,7 @@ import { useAuthContext } from '@/providers/AuthContext';
 import { palette } from '@/styles/color';
 import { useRouter } from 'next/navigation';
 import ShelterEvent from '../ShelterEvent/ShelterEvent';
+import useVolunteerEvent from '@/api/shelter/event/useVolunteerEvent';
 interface VolunteerEventPageProps {
   shelterId: number;
   volunteerEventId: number;
@@ -25,6 +26,7 @@ export default function VolunteerEventPage({
   const { dialogOn, dialogOff, setDialogLoading } = useDialog();
 
   const { mutateAsync: deleteEvent } = useDeleteVolunteerEvent();
+  const { data: eventDetail } = useVolunteerEvent(shelterId, volunteerEventId);
 
   const handleClickDeleteVolEvent = (volunteerEventId: number) => {
     dialogOn({
@@ -44,10 +46,25 @@ export default function VolunteerEventPage({
     });
   };
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: eventDetail?.title,
+        text: '댕글댕글과 함께 더 나은 세상을 만들어봐요!',
+        url: location.href
+      });
+    } else {
+      navigator.clipboard.writeText(location.href);
+      toastOn(
+        '공유하기가 지원되지 않는 환경 입니다. 클립보드에 url을 저장했어요!'
+      );
+    }
+  };
+
   const ShareButton = () => {
     return (
       <div style={{ display: 'flex', gap: 12 }}>
-        <UploadIcon onClick={() => toastOn('공유하기 버튼 클릭됨')} />
+        <UploadIcon onClick={handleShare} />
         {dangle_id === shelterId && (
           <Delete onClick={() => handleClickDeleteVolEvent(volunteerEventId)} />
         )}
@@ -62,7 +79,11 @@ export default function VolunteerEventPage({
 
   return (
     <>
-      <ShelterEvent shelterId={shelterId} volunteerEventId={volunteerEventId} />
+      <ShelterEvent
+        shelterId={shelterId}
+        volunteerEventId={volunteerEventId}
+        data={eventDetail!}
+      />
     </>
   );
 }
