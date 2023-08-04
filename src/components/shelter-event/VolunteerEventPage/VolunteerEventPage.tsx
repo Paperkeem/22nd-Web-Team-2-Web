@@ -11,6 +11,13 @@ import { palette } from '@/styles/color';
 import { useRouter } from 'next/navigation';
 import ShelterEvent from '../ShelterEvent/ShelterEvent';
 import useVolunteerEvent from '@/api/shelter/event/useVolunteerEvent';
+import { useEffect } from 'react';
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 interface VolunteerEventPageProps {
   shelterId: number;
   volunteerEventId: number;
@@ -46,6 +53,40 @@ export default function VolunteerEventPage({
     });
   };
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.js'; // 카카오톡 SDK
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script); // return으로 제거해주기
+    };
+  }, []);
+
+  const shareToKakaoTalk = (title: string, url: string) => {
+    if (window.Kakao === undefined) {
+      return;
+    }
+
+    const kakao = window.Kakao;
+
+    // 인증이 안되어 있는 경우, 인증한다.
+    if (!kakao.isInitialized()) {
+      kakao.init(process.env.NEXT_PUBLIC_KAKAO_MAP_API);
+    }
+
+    kakao.Share.sendDefault({
+      objectType: 'text',
+      text: title,
+      link: {
+        mobileWebUrl: url,
+        webUrl: url
+      }
+    });
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -55,6 +96,7 @@ export default function VolunteerEventPage({
       });
     } else {
       navigator.clipboard.writeText(location.href);
+      shareToKakaoTalk(eventDetail?.title!, location.href);
       toastOn(
         '공유하기가 지원되지 않는 환경 입니다. 클립보드에 url을 저장했어요!'
       );
