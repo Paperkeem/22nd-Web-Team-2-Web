@@ -4,7 +4,6 @@ import { MyVolInfo } from '@/api/mypage/mypage';
 import useMyInfo from '@/api/mypage/useMyInfo';
 import useUpdateVolInfo from '@/api/mypage/useUpdateVolInfo';
 import Button from '@/components/common/Button/Button';
-import FormProvider from '@/components/common/FormProvider/FormProvider';
 import TextField from '@/components/common/TextField/TextField';
 import { isShelterInfo } from '@/components/mypage/MyPageMain/MyPageMain';
 import ToggleSection from '@/components/mypage/MyPageMain/ToggleSection';
@@ -15,9 +14,9 @@ import yup from '@/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
-
 import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import * as styles from './styles.css';
 
 interface UpdateMyVolInfo extends Pick<MyVolInfo, 'nickName' | 'phoneNumber'> {}
 
@@ -118,16 +117,8 @@ export default function MyPageVolunteer({
 
   return (
     <>
-      <ToggleSection isShelterRole={true} dangle_role={'SHELTER'} />
-      <FormProvider methods={method} onSubmit={handleSubmit(onVaild)}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '40px',
-            paddingTop: '24px'
-          }}
-        >
+      <form onSubmit={handleSubmit(onVaild)}>
+        <div className={styles.wrapper}>
           <TextField
             label="닉네임"
             {...register('nickName')}
@@ -147,7 +138,7 @@ export default function MyPageVolunteer({
         >
           수정하기
         </Button>
-      </FormProvider>
+      </form>
     </>
   );
 }
