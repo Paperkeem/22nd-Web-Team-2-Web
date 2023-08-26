@@ -97,7 +97,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const message = fixedHelperMessage || error?.message || helper || '';
 
     return (
-      <div arial-lable={`${name}-text-field`}>
+      <div arial-lable={`${name}-text-field`} style={{ display: 'block' }}>
         {label && (
           <Caption1 className={styles.label} element="label" color="gray600">
             {label} {required && <Caption1 color="primary300">*</Caption1>}
