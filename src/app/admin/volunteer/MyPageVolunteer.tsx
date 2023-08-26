@@ -7,6 +7,7 @@ import Button from '@/components/common/Button/Button';
 import FormProvider from '@/components/common/FormProvider/FormProvider';
 import TextField from '@/components/common/TextField/TextField';
 import { isShelterInfo } from '@/components/mypage/MyPageMain/MyPageMain';
+import ToggleSection from '@/components/mypage/MyPageMain/ToggleSection';
 import useHeader from '@/hooks/useHeader';
 import useToast from '@/hooks/useToast';
 import { formatPhone, phoneRegex, removeDash } from '@/utils/formatInputs';
@@ -116,34 +117,37 @@ export default function MyPageVolunteer({
   };
 
   return (
-    <FormProvider methods={method} onSubmit={handleSubmit(onVaild)}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '40px',
-          paddingTop: '24px'
-        }}
-      >
-        <TextField
-          label="닉네임"
-          {...register('nickName')}
-          error={errors.nickName}
-        />
-        <TextField
-          label="연락처"
-          {...register('phoneNumber', { onChange: handlePhoneNumberChange })}
-          error={errors.phoneNumber}
-        />
-      </div>
+    <>
+      <ToggleSection isShelterRole={true} dangle_role={'SHELTER'} />
+      <FormProvider methods={method} onSubmit={handleSubmit(onVaild)}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '40px',
+            paddingTop: '24px'
+          }}
+        >
+          <TextField
+            label="닉네임"
+            {...register('nickName')}
+            error={errors.nickName}
+          />
+          <TextField
+            label="연락처"
+            {...register('phoneNumber', { onChange: handlePhoneNumberChange })}
+            error={errors.phoneNumber}
+          />
+        </div>
 
-      <Button
-        disabled={!isDirty || !isEmpty(errors)}
-        style={{ marginTop: '239px' }}
-        type="submit"
-      >
-        수정하기
-      </Button>
-    </FormProvider>
+        <Button
+          disabled={!isDirty || !isEmpty(errors)}
+          style={{ marginTop: '239px' }}
+          type="submit"
+        >
+          수정하기
+        </Button>
+      </FormProvider>
+    </>
   );
 }
