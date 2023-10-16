@@ -61,7 +61,7 @@ globalStyle(`${calendar} button`, {
   width: '32px',
   height: '32px',
   borderRadius: '6px',
-  padding: '4px 6px 4px 6px',
+  // padding: '4px 6px 4px 6px',
   textAlign: 'center'
 });
 
@@ -102,6 +102,9 @@ globalStyle(`${calendar} .react-calendar__month-view__days`, {
 });
 
 globalStyle(`${calendar} .react-calendar__tile`, {
+  margin: 0,
+  border: 0,
+
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
