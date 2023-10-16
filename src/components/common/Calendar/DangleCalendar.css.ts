@@ -58,9 +58,9 @@ globalStyle(`${calendar} &::before`, {
 });
 
 globalStyle(`${calendar} button`, {
-  width: '32px',
+  //width: '32px',
   height: '32px',
-  borderRadius: '6px',
+  // borderRadius: '6px',
   // padding: '4px 6px 4px 6px',
   textAlign: 'center'
 });
